@@ -4,6 +4,7 @@ import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
 import net.axay.kotlinsmtp.server.command.api.SmtpCommands
 
+@Suppress("MemberVisibilityCanBePrivate")
 class SmtpSession(
     val socket: Socket,
     val server: SmtpServer,
@@ -13,14 +14,18 @@ class SmtpSession(
 
     private var shouldQuit = false
 
-    suspend fun handle() {
-        sendResponse(220, "${server.hostname} ${server.servicename} Service ready")
+    var helo: String? = null; internal set
 
-        while (!shouldQuit) {
-            val line = readChannel.readUTF8Line()
-            if (line != null) {
-                SmtpCommands.handle(line, this)
-            } else return
+    suspend fun handle() {
+        socket.use {
+            sendResponse(220, "${server.hostname} ${server.servicename} Service ready")
+
+            while (!shouldQuit) {
+                val line = readChannel.readUTF8Line()
+                if (line != null) {
+                    SmtpCommands.handle(line, this)
+                } else break
+            }
         }
     }
 
