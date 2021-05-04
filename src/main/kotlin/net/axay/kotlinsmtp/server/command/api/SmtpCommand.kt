@@ -1,6 +1,7 @@
 package net.axay.kotlinsmtp.server.command.api
 
 import net.axay.kotlinsmtp.server.SmtpSession
+import net.axay.kotlinsmtp.server.exception.SmtpSendResponse
 import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 abstract class SmtpCommand(
@@ -9,6 +10,6 @@ abstract class SmtpCommand(
 ) {
     abstract suspend fun execute(command: ParsedCommand, session: SmtpSession)
 
-    protected suspend fun SmtpSession.respondSyntax(message: String = "Syntax error in parameters or arguments") =
-        sendResponse(SmtpStatusCode.CommandSyntaxError, "$message - Expected syntax: $name $expectedSyntax")
+    protected fun respondSyntax(message: String = "Syntax error in parameters or arguments"): Nothing =
+        throw SmtpSendResponse(SmtpStatusCode.CommandSyntaxError, "$message - Expected syntax: $name $expectedSyntax")
 }
