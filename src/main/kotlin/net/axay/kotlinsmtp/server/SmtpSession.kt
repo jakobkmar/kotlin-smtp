@@ -9,12 +9,20 @@ class SmtpSession(
     val socket: Socket,
     val server: SmtpServer,
 ) {
-    val readChannel = socket.openReadChannel()
-    val writeChannel = socket.openWriteChannel(autoFlush = true)
+    private val readChannel = socket.openReadChannel()
+    private val writeChannel = socket.openWriteChannel(autoFlush = true)
 
     private var shouldQuit = false
 
-    var helo: String? = null; internal set
+    /**
+     * This objects holds the data that was currently collected during the session.
+     */
+    val sessionData = SessionData()
+
+    class SessionData {
+        var helo: String? = null; internal set
+        var from: String? = null; internal set
+    }
 
     suspend fun handle() {
         socket.use {
