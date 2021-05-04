@@ -11,9 +11,9 @@ class HeloCommand : SmtpCommand(
 ) {
     override suspend fun execute(command: ParsedCommand, session: SmtpSession) {
         if (command.parts.size < 2)
-            session.respondSyntax()
+            respondSyntax()
 
-        session.helo = command.parts[1]
+        session.sessionData.helo = command.parts[1]
 
         session.sendResponse(SmtpStatusCode.Okay, session.server.hostname)
     }
