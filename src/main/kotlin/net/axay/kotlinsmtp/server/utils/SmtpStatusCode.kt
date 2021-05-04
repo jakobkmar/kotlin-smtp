@@ -17,7 +17,7 @@ object SmtpStatusCode {
     const val ServiceClosingChannel = 221
     const val ServiceNotAvailable = 421
 
-    const val MailActionOkay = 250
+    const val Okay = 250
     const val UserNotLocalWillForward = 251
     const val CannotVerifyUser = 252
 
