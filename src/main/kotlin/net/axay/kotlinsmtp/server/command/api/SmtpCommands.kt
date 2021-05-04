@@ -2,6 +2,7 @@ package net.axay.kotlinsmtp.server.command.api
 
 import net.axay.kotlinsmtp.server.SmtpSession
 import net.axay.kotlinsmtp.server.command.HeloCommand
+import net.axay.kotlinsmtp.server.exception.SmtpSendResponse
 import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 enum class SmtpCommands(val instance: SmtpCommand) {
@@ -17,7 +18,11 @@ enum class SmtpCommands(val instance: SmtpCommand) {
             } catch (exc: IllegalArgumentException) { null }
 
             if (smtpCommand != null)
-                smtpCommand.instance.execute(parsedCommand, session)
+                try {
+                    smtpCommand.instance.execute(parsedCommand, session)
+                } catch (response: SmtpSendResponse) {
+                    session.sendResponse(response.statusCode, response.message)
+                }
             else
                 session.sendResponse(SmtpStatusCode.CommandRejected, "Command unrecognized")
         }
