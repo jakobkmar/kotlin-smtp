@@ -1,3 +1,5 @@
+val ktorVersion = "1.5.4"
+
 plugins {
     kotlin("jvm") version "1.4.32"
 }
@@ -11,4 +13,6 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+
+    implementation("io.ktor:ktor-network:$ktorVersion")
 }
