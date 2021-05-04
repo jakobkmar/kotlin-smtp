@@ -8,12 +8,14 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.net.InetAddress
 import kotlin.coroutines.CoroutineContext
 
 @Suppress("MemberVisibilityCanBePrivate")
 class SmtpServer(
-    val hostname: String,
     val port: Int,
+    val hostname: String = InetAddress.getLocalHost().canonicalHostName,
+    val servicename: String? = "kotlin-smtp",
 ) {
     private val serverScope = CoroutineScope(Dispatchers.IO)
 
@@ -32,7 +34,7 @@ class SmtpServer(
             return if (serverSocket != null) {
                 serverSocket = aSocket(ActorSelectorManager(coroutineContext))
                     .tcp()
-                    .bind(hostname, port)
+                    .bind(port = port)
 
                 listen()
 
@@ -64,7 +66,7 @@ class SmtpServer(
                 val socket = currentSocket.accept()
 
                 launch {
-                    socket.openReadChannel()
+                    SmtpSession(socket, this@SmtpServer).handle()
                 }
             }
         }
