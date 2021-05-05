@@ -9,15 +9,15 @@ class SmtpSession(
     val socket: Socket,
     val server: SmtpServer,
 ) {
-    private val readChannel = socket.openReadChannel()
-    private val writeChannel = socket.openWriteChannel(autoFlush = true)
+    internal val readChannel = socket.openReadChannel()
+    internal val writeChannel = socket.openWriteChannel(autoFlush = true)
 
     private var shouldQuit = false
 
     /**
      * This objects holds the data that was currently collected during the session.
      */
-    val sessionData = SessionData()
+    var sessionData = SessionData(); private set
 
     class SessionData {
         var helo: String? = null; internal set
@@ -39,5 +39,9 @@ class SmtpSession(
 
     suspend fun sendResponse(code: Int, message: String) {
         writeChannel.writeStringUtf8("$code $message")
+    }
+
+    fun resetTransaction() {
+        sessionData = SessionData()
     }
 }
