@@ -2,11 +2,15 @@ package net.axay.kotlinsmtp.server.command.api
 
 import net.axay.kotlinsmtp.server.SmtpSession
 import net.axay.kotlinsmtp.server.command.HeloCommand
+import net.axay.kotlinsmtp.server.command.MailCommand
+import net.axay.kotlinsmtp.server.command.RcptCommand
 import net.axay.kotlinsmtp.server.exception.SmtpSendResponse
 import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 enum class SmtpCommands(val instance: SmtpCommand) {
     HELO(HeloCommand()),
+    MAIL(MailCommand()),
+    RCPT(RcptCommand()),
     ;
 
     companion object {
