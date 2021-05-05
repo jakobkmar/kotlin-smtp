@@ -6,7 +6,7 @@ import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 abstract class SmtpCommand(
     private val name: String,
-    private val description: String,
+    val description: String,
     private val expectedSyntax: String? = null
 ) {
     abstract suspend fun execute(command: ParsedCommand, session: SmtpSession)
