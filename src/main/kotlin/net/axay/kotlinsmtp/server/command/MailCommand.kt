@@ -9,6 +9,7 @@ import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 class MailCommand : SmtpCommand(
     "MAIL",
+    "Starts a mail transaction and specifies the sender.",
     "FROM:<senderaddress>"
 ) {
     override suspend fun execute(command: ParsedCommand, session: SmtpSession) {

@@ -9,6 +9,7 @@ import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 class RcptCommand : SmtpCommand(
     "RCPT",
+    "Specified a recipient who should receive the mail. This command can be called multiple times.",
     "TO:<(path:)address>"
 ) {
     override suspend fun execute(command: ParsedCommand, session: SmtpSession) {

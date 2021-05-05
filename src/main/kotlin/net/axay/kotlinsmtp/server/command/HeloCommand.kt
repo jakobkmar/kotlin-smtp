@@ -7,6 +7,7 @@ import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 class HeloCommand : SmtpCommand(
     "HELO",
+    "The client introduces itself.",
     "<hostname>"
 ) {
     override suspend fun execute(command: ParsedCommand, session: SmtpSession) {
