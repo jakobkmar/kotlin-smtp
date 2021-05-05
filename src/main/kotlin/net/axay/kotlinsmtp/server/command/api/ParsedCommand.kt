@@ -6,4 +6,6 @@ class ParsedCommand(val rawCommand: String) {
     val commandName = rawCommand.takeWhile { it != ' ' }.toUpperCase()
 
     val parts by lazy { rawCommand.split(Values.whitespaceRegex) }
+
+    val rawWithoutCommand by lazy { rawCommand.removePrefix(rawCommand.takeWhile { it != ' ' } + ' ') }
 }
