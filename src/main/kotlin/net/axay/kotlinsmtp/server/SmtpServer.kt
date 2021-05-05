@@ -60,10 +60,10 @@ class SmtpServer(
     }
 
     private fun listen() {
+        val thisSocket = serverSocket!!
         serverScope.launch {
-            while (serverSocket != null) {
-                val currentSocket = serverSocket!!
-                val socket = currentSocket.accept()
+            while (!thisSocket.isClosed) {
+                val socket = thisSocket.accept()
 
                 launch {
                     SmtpSession(socket, this@SmtpServer).handle()
