@@ -2,10 +2,7 @@ package net.axay.kotlinsmtp.server
 
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.net.InetAddress
@@ -29,14 +26,15 @@ class SmtpServer(
      *
      * @return true, if the server was started - false if it was already running
      */
-    suspend fun start(coroutineContext: CoroutineContext = Dispatchers.IO): Boolean {
+    suspend fun start(coroutineContext: CoroutineContext = Dispatchers.IO, wait: Boolean = false): Boolean {
         serverSocketMutex.withLock {
             return if (serverSocket != null) {
                 serverSocket = aSocket(ActorSelectorManager(coroutineContext))
                     .tcp()
                     .bind(port = port)
 
-                listen()
+                val job = listen()
+                if (wait) job.join()
 
                 true
             } else false
@@ -59,9 +57,9 @@ class SmtpServer(
         }
     }
 
-    private fun listen() {
+    private fun listen(): Job {
         val thisSocket = serverSocket!!
-        serverScope.launch {
+        return serverScope.launch {
             while (!thisSocket.isClosed) {
                 val socket = thisSocket.accept()
 
