@@ -11,6 +11,8 @@ abstract class SmtpCommand(
 ) {
     abstract suspend fun execute(command: ParsedCommand, session: SmtpSession)
 
-    protected fun respondSyntax(message: String = "Syntax error in parameters or arguments"): Nothing =
-        throw SmtpSendResponse(SmtpStatusCode.CommandSyntaxError, "$message - Expected syntax: $name $expectedSyntax")
+    protected fun respondSyntax(message: String = "Syntax error in parameters or arguments"): Nothing {
+        val syntaxResponse = if (expectedSyntax != null) "$name $expectedSyntax" else name
+        throw SmtpSendResponse(SmtpStatusCode.CommandSyntaxError, "$message - Expected syntax: $syntaxResponse")
+    }
 }
