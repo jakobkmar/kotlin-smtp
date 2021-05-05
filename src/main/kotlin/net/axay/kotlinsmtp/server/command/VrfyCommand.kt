@@ -11,7 +11,7 @@ class VrfyCommand : SmtpCommand(
     "searchterm"
 ) {
     override suspend fun execute(command: ParsedCommand, session: SmtpSession) {
-        val searchTerm = command.rawCommand.removeRange(0, 5)
+        val searchTerm = command.rawWithoutCommand
 
         // TODO add implementation when user storage is added
 
