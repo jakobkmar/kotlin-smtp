@@ -12,7 +12,7 @@ class SmtpSession(
     internal val readChannel = socket.openReadChannel()
     internal val writeChannel = socket.openWriteChannel(autoFlush = true)
 
-    private var shouldQuit = false
+    internal var shouldQuit = false
 
     /**
      * This objects holds the data that was currently collected during the session.
