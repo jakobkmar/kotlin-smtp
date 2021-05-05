@@ -14,6 +14,8 @@ class HeloCommand : SmtpCommand(
         if (command.parts.size < 2)
             respondSyntax()
 
+        session.resetTransaction()
+
         session.sessionData.helo = command.parts[1]
 
         session.sendResponse(SmtpStatusCode.Okay, session.server.hostname)
