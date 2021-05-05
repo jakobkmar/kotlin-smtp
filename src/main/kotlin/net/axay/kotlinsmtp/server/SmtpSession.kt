@@ -38,7 +38,7 @@ class SmtpSession(
     }
 
     suspend fun sendResponse(code: Int, message: String) {
-        writeChannel.writeStringUtf8("$code $message")
+        writeChannel.writeStringUtf8("$code $message\r\n")
     }
 
     fun resetTransaction() {
