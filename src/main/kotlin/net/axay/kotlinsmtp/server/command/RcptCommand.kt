@@ -15,7 +15,21 @@ class RcptCommand : SmtpCommand(
         if (!command.rawCommand.startsWith("RCPT TO:", true))
             respondSyntax()
 
-        val recipient = AddressUtils.extractFromBrackets(command.parts[1].split(':')[1]) ?: respondSyntax()
+        val addressParts = AddressUtils.extractFromBrackets(command.parts[1].split(':')[1])
+            ?.split(':') ?: respondSyntax()
+
+        var forwardPath: List<String>? = null
+        val recipient = when (addressParts.size) {
+            1 -> addressParts[0]
+            2 -> {
+                forwardPath = addressParts[0].split(',')
+                addressParts[1]
+            }
+            else -> throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid recipient syntax")
+        }
+
+        if (forwardPath?.any { !AddressUtils.validateHost(it) } == true)
+            throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid forward path")
 
         if (!AddressUtils.validateAddress(recipient))
             throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid email address")
