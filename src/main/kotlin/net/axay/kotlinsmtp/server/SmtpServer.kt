@@ -49,7 +49,9 @@ class SmtpServer(
     suspend fun stop(): Boolean = coroutineScope {
         serverSocketMutex.withLock {
             if (serverSocket != null) {
-                serverSocket!!.awaitClosed()
+                launch(Dispatchers.IO) {
+                    serverSocket!!.close()
+                }.join()
                 serverSocket = null
 
                 true
