@@ -7,7 +7,7 @@ import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 class VrfyCommand : SmtpCommand(
     "VRFY",
-    "Checks if a given mailbox exists.",
+    "Checks if the given mailbox exists.",
     "searchterm"
 ) {
     override suspend fun execute(command: ParsedCommand, session: SmtpSession) {
