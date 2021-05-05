@@ -27,18 +27,18 @@ class SmtpServer(
      * @return true, if the server was started - false if it was already running
      */
     suspend fun start(coroutineContext: CoroutineContext = Dispatchers.IO, wait: Boolean = false): Boolean {
-        serverSocketMutex.withLock {
-            return if (serverSocket != null) {
+        return if (serverSocket == null) {
+            val job = serverSocketMutex.withLock {
                 serverSocket = aSocket(ActorSelectorManager(coroutineContext))
                     .tcp()
                     .bind(port = port)
 
-                val job = listen()
-                if (wait) job.join()
+                listen()
+            }
+            if (wait) job.join()
 
-                true
-            } else false
-        }
+            true
+        } else false
     }
 
     /**
