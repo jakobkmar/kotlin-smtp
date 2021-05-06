@@ -41,6 +41,15 @@ class SmtpSession(
         writeChannel.writeStringUtf8("$code $message\r\n")
     }
 
+    suspend fun sendMultilineResponse(code: Int, lines: List<String>) {
+        lines.forEachIndexed { index, line ->
+            if (index != lines.lastIndex)
+                writeChannel.writeStringUtf8("$code-$line")
+            else
+                writeChannel.writeStringUtf8("$code $line")
+        }
+    }
+
     fun resetTransaction() {
         sessionData = SessionData()
     }
