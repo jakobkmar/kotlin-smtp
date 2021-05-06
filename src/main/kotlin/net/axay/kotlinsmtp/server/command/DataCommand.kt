@@ -1,6 +1,5 @@
 package net.axay.kotlinsmtp.server.command
 
-import io.ktor.utils.io.*
 import net.axay.kotlinsmtp.server.SmtpSession
 import net.axay.kotlinsmtp.server.command.api.ParsedCommand
 import net.axay.kotlinsmtp.server.command.api.SmtpCommand
