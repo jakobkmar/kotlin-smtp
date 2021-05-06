@@ -2,6 +2,8 @@ package net.axay.kotlinsmtp.server
 
 import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
+import net.axay.kotlinsmtp.logging.LogLevel
+import net.axay.kotlinsmtp.logging.log
 import net.axay.kotlinsmtp.server.command.api.SmtpCommands
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -9,8 +11,10 @@ class SmtpSession(
     val socket: Socket,
     val server: SmtpServer,
 ) {
-    internal val readChannel = socket.openReadChannel()
-    internal val writeChannel = socket.openWriteChannel(autoFlush = true)
+    object SessionLog : LogLevel("SESSION", false)
+
+    private val readChannel = socket.openReadChannel()
+    private val writeChannel = socket.openWriteChannel(autoFlush = true)
 
     internal var shouldQuit = false
 
@@ -29,7 +33,7 @@ class SmtpSession(
             sendResponse(220, "${server.hostname} ${server.servicename} Service ready")
 
             while (!shouldQuit) {
-                val line = readChannel.readUTF8Line()
+                val line = readLine()
                 if (line != null) {
                     SmtpCommands.handle(line, this)
                 } else break
@@ -37,16 +41,27 @@ class SmtpSession(
         }
     }
 
+    internal suspend fun readLine(): String? {
+        val line = readChannel.readUTF8Line()
+        log(SessionLog) { "-> $line" }
+        return line
+    }
+
+    private suspend fun respondLine(message: String) {
+        writeChannel.writeStringUtf8(message + "\r\n")
+        log(SessionLog) { "<- $message" }
+    }
+
     suspend fun sendResponse(code: Int, message: String) {
-        writeChannel.writeStringUtf8("$code $message\r\n")
+        respondLine("$code $message")
     }
 
     suspend fun sendMultilineResponse(code: Int, lines: List<String>) {
         lines.forEachIndexed { index, line ->
             if (index != lines.lastIndex)
-                writeChannel.writeStringUtf8("$code-$line\r\n")
+                respondLine("$code-$line")
             else
-                writeChannel.writeStringUtf8("$code $line\r\n")
+                respondLine("$code $line")
         }
     }
 
