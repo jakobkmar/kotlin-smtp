@@ -7,6 +7,7 @@ import net.axay.kotlinsmtp.server.utils.SmtpStatusCode
 
 enum class SmtpCommands(val instance: SmtpCommand) {
     HELO(HeloCommand()),
+    EHLO(EhloCommand()),
     MAIL(MailCommand()),
     RCPT(RcptCommand()),
     DATA(DataCommand()),
