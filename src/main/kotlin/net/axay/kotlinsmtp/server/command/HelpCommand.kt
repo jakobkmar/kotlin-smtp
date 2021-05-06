@@ -15,7 +15,7 @@ class HelpCommand : SmtpCommand(
         val searchterm = command.rawWithoutCommand
 
         if (searchterm.isNotEmpty()) {
-            val searchedCommand = SmtpCommands.values().find { it.name.contains(searchterm) }
+            val searchedCommand = SmtpCommands.values().find { searchterm.uppercase().contains(it.name) }
             if (searchedCommand != null) {
                 session.sendResponse(SmtpStatusCode.HelpMessage, searchedCommand.instance.description)
             } else {
