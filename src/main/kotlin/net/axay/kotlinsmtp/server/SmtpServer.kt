@@ -5,6 +5,7 @@ import io.ktor.network.sockets.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import net.axay.kotlinsmtp.logging.log
 import java.net.InetAddress
 import kotlin.coroutines.CoroutineContext
 
@@ -62,6 +63,7 @@ class SmtpServer(
     private fun listen(): Job {
         val thisSocket = serverSocket!!
         return serverScope.launch {
+            log { "Started smtp server, now listening on port $port" }
             while (!thisSocket.isClosed) {
                 val socket = thisSocket.accept()
 
