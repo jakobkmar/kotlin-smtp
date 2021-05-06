@@ -19,7 +19,7 @@ class DataCommand : SmtpCommand(
         val stringBuilder = StringBuilder()
         var terminated = false
         while (!terminated) {
-            val line = session.readChannel.readUTF8Line()
+            val line = session.readLine()
             if (line == "." || line == null)
                 terminated = true
             else stringBuilder.append(line)
