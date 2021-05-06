@@ -44,9 +44,9 @@ class SmtpSession(
     suspend fun sendMultilineResponse(code: Int, lines: List<String>) {
         lines.forEachIndexed { index, line ->
             if (index != lines.lastIndex)
-                writeChannel.writeStringUtf8("$code-$line")
+                writeChannel.writeStringUtf8("$code-$line\r\n")
             else
-                writeChannel.writeStringUtf8("$code $line")
+                writeChannel.writeStringUtf8("$code $line\r\n")
         }
     }
 
