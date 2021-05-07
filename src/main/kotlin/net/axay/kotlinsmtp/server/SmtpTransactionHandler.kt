@@ -1,10 +1,11 @@
 package net.axay.kotlinsmtp.server
 
+@Suppress("MemberVisibilityCanBePrivate")
 abstract class SmtpTransactionHandler {
     lateinit var sessionData: SmtpSession.SessionData
-        internal set
+        private set
 
-    fun init(sessionData: SmtpSession.SessionData) {
+    internal fun init(sessionData: SmtpSession.SessionData) {
         this.sessionData = sessionData
     }
 
