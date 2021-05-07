@@ -1,4 +1,4 @@
-package net.axay.kotlinsmtp.server
+package net.axay.kotlinsmtp.server.internal
 
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
