@@ -1,6 +1,6 @@
 package net.axay.kotlinsmtp.server.command
 
-import net.axay.kotlinsmtp.server.internal.SmtpSession
+import net.axay.kotlinsmtp.server.SmtpSession
 import net.axay.kotlinsmtp.server.command.api.ParsedCommand
 import net.axay.kotlinsmtp.server.command.api.SmtpCommand
 import net.axay.kotlinsmtp.server.exception.SmtpSendResponse

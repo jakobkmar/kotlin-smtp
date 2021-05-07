@@ -1,10 +1,9 @@
-package net.axay.kotlinsmtp.server.internal
+package net.axay.kotlinsmtp.server
 
 import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
 import net.axay.kotlinsmtp.logging.LogLevel
 import net.axay.kotlinsmtp.logging.log
-import net.axay.kotlinsmtp.server.SmtpTransactionHandler
 import net.axay.kotlinsmtp.server.command.api.SmtpCommands
 
 @Suppress("MemberVisibilityCanBePrivate")

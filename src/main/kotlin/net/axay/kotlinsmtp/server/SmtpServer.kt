@@ -1,4 +1,4 @@
-package net.axay.kotlinsmtp.server.internal
+package net.axay.kotlinsmtp.server
 
 import io.ktor.network.selector.*
 import io.ktor.network.sockets.*
@@ -6,7 +6,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import net.axay.kotlinsmtp.logging.log
-import net.axay.kotlinsmtp.server.SmtpTransactionHandler
 import java.net.InetAddress
 import kotlin.coroutines.CoroutineContext
 
