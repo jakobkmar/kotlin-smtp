@@ -21,7 +21,7 @@ class DataCommand : SmtpCommand(
             val line = session.readLine()
             if (line == "." || line == null)
                 terminated = true
-            else stringBuilder.append(line)
+            else stringBuilder.appendLine(line)
         }
 
         session.transactionHandler?.data(stringBuilder)
