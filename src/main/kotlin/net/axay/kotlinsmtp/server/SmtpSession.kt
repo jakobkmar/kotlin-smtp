@@ -18,7 +18,7 @@ class SmtpSession(
 
     internal var shouldQuit = false
 
-    val sessionData = SessionData()
+    var sessionData = SessionData(); internal set
 
     class SessionData {
         var helo: String? = null; internal set
@@ -26,8 +26,11 @@ class SmtpSession(
 
     var transactionHandler: SmtpTransactionHandler? = null
         get() {
-            if (field == null && server.transactionHandlerCreator != null)
-                field = server.transactionHandlerCreator.invoke()
+            if (field == null && server.transactionHandlerCreator != null) {
+                val handler = server.transactionHandlerCreator.invoke()
+                handler.init(sessionData)
+                field = handler
+            }
             return field
         }
 
@@ -71,5 +74,6 @@ class SmtpSession(
     suspend fun resetTransaction() {
         transactionHandler?.done()
         transactionHandler = null
+        sessionData = SessionData()
     }
 }
