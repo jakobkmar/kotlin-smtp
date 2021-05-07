@@ -35,6 +35,8 @@ class RcptCommand : SmtpCommand(
         if (!AddressUtils.validateAddress(recipient))
             throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid email address")
 
+        session.transactionHandler?.to(recipient)
+
         session.sendResponse(SmtpStatusCode.Okay, "Ok")
     }
 }

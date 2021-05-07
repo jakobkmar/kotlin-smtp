@@ -24,6 +24,8 @@ class DataCommand : SmtpCommand(
             else stringBuilder.append(line)
         }
 
+        session.transactionHandler?.data(stringBuilder)
+
         session.sendResponse(250, "Ok")
     }
 }

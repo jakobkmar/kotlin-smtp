@@ -4,6 +4,7 @@ import io.ktor.network.sockets.*
 import io.ktor.utils.io.*
 import net.axay.kotlinsmtp.logging.LogLevel
 import net.axay.kotlinsmtp.logging.log
+import net.axay.kotlinsmtp.server.SmtpTransactionHandler
 import net.axay.kotlinsmtp.server.command.api.SmtpCommands
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -18,15 +19,18 @@ class SmtpSession(
 
     internal var shouldQuit = false
 
-    /**
-     * This objects holds the data that was currently collected during the session.
-     */
-    var sessionData = SessionData(); private set
+    val sessionData = SessionData()
 
     class SessionData {
         var helo: String? = null; internal set
-        var from: String? = null; internal set
     }
+
+    var transactionHandler: SmtpTransactionHandler? = null
+        get() {
+            if (field == null && server.transactionHandlerCreator != null)
+                field = server.transactionHandlerCreator.invoke()
+            return field
+        }
 
     suspend fun handle() {
         socket.use {
@@ -65,7 +69,8 @@ class SmtpSession(
         }
     }
 
-    fun resetTransaction() {
-        sessionData = SessionData()
+    suspend fun resetTransaction() {
+        transactionHandler?.done()
+        transactionHandler = null
     }
 }

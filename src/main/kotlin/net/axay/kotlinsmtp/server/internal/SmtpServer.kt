@@ -6,6 +6,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import net.axay.kotlinsmtp.logging.log
+import net.axay.kotlinsmtp.server.SmtpTransactionHandler
 import java.net.InetAddress
 import kotlin.coroutines.CoroutineContext
 
@@ -14,6 +15,7 @@ class SmtpServer(
     val port: Int,
     val hostname: String = InetAddress.getLocalHost().canonicalHostName,
     val servicename: String? = "kotlin-smtp",
+    val transactionHandlerCreator: (() -> SmtpTransactionHandler)? = null,
 ) {
     private val serverScope = CoroutineScope(Dispatchers.IO)
 

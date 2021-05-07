@@ -21,7 +21,7 @@ class MailCommand : SmtpCommand(
         if (!AddressUtils.validateAddress(from))
             throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid email address")
 
-        session.sessionData.from = from
+        session.transactionHandler?.from(from)
         session.sendResponse(SmtpStatusCode.Okay, "Ok")
     }
 }
