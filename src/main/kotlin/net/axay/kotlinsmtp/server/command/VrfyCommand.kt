@@ -11,10 +11,25 @@ class VrfyCommand : SmtpCommand(
     "searchterm"
 ) {
     override suspend fun execute(command: ParsedCommand, session: SmtpSession) {
-        val searchTerm = command.rawWithoutCommand
+        val users = session.server.userHandler?.verify(command.rawWithoutCommand)
 
-        // TODO add implementation when user storage is added
-
-        session.sendResponse(SmtpStatusCode.CommandNotImplemented, "The verify command is not supported")
+        if (users == null) {
+            session.sendResponse(SmtpStatusCode.CommandNotImplemented, "The verify command is not supported")
+        } else {
+            if (users.isNotEmpty()) {
+                if (users.size != 1) {
+                    val response = ArrayList<String>()
+                    response += " Ambiguous; Possibilities are"
+                    session.sendMultilineResponse(
+                        SmtpStatusCode.InvalidMailbox,
+                        users.mapTo(response) { it.stringRepresentation }
+                    )
+                } else {
+                    session.sendResponse(SmtpStatusCode.Okay, users.first().stringRepresentation)
+                }
+            } else {
+                session.sendResponse(SmtpStatusCode.CannotVerifyUser, "The given mailbox could not be verified")
+            }
+        }
     }
 }
