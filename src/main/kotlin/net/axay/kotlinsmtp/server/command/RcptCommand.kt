@@ -26,14 +26,14 @@ class RcptCommand : SmtpCommand(
                 forwardPath = addressParts[0].split(',')
                 addressParts[1]
             }
-            else -> throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid recipient syntax")
+            else -> throw SmtpSendResponse(SmtpStatusCode.InvalidMailbox, "Invalid recipient syntax")
         }
 
         if (forwardPath?.any { !AddressUtils.validateHost(it) } == true)
-            throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid forward path")
+            throw SmtpSendResponse(SmtpStatusCode.InvalidMailbox, "Invalid forward path")
 
         if (!AddressUtils.validateAddress(recipient))
-            throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid email address")
+            throw SmtpSendResponse(SmtpStatusCode.InvalidMailbox, "Invalid email address")
 
         session.transactionHandler?.to(recipient)
 

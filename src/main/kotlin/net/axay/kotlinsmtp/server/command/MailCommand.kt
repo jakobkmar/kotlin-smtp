@@ -19,7 +19,7 @@ class MailCommand : SmtpCommand(
         val from = AddressUtils.extractFromBrackets(command.parts[1].split(':')[1]) ?: respondSyntax()
 
         if (!AddressUtils.validateAddress(from))
-            throw SmtpSendResponse(SmtpStatusCode.InvalidMailboxSyntax, "Invalid email address")
+            throw SmtpSendResponse(SmtpStatusCode.InvalidMailbox, "Invalid email address")
 
         session.transactionHandler?.from(from)
         session.sendResponse(SmtpStatusCode.Okay, "Ok")

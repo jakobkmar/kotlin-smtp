@@ -34,7 +34,7 @@ object SmtpStatusCode {
     const val InsufficientStorage = 452
     const val ExceededStorageAllocation = 552
 
-    const val InvalidMailboxSyntax = 553
+    const val InvalidMailbox = 553
 
     const val StartMailInput = 354
 
