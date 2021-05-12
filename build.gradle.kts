@@ -20,7 +20,7 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
 
-    implementation("io.ktor:ktor-network:$ktorVersion")
+    api("io.ktor:ktor-network:$ktorVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
 }
