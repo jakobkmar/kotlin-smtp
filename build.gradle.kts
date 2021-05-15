@@ -27,6 +27,7 @@ dependencies {
 
 tasks {
     withType<JavaCompile> {
+        options.encoding = "UTF-8"
         options.release.set(11)
     }
     withType<KotlinCompile> {
@@ -41,6 +42,10 @@ tasks {
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+signing {
+    sign(publishing.publications)
 }
 
 publishing {
