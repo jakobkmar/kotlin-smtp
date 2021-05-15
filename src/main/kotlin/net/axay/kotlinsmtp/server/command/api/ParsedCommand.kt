@@ -3,7 +3,7 @@ package net.axay.kotlinsmtp.server.command.api
 import net.axay.kotlinsmtp.Values
 
 class ParsedCommand(val rawCommand: String) {
-    val commandName = rawCommand.takeWhile { it != ' ' }.toUpperCase()
+    val commandName = rawCommand.takeWhile { it != ' ' }.uppercase()
 
     val parts by lazy { rawCommand.split(Values.whitespaceRegex) }
 
