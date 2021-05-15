@@ -13,6 +13,8 @@ plugins {
 group = "net.axay"
 version = "0.0.1"
 
+description = "An implementation of the SMTP server protocol written in Kotlin"
+
 repositories {
     mavenCentral()
 }
